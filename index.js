@@ -1,6 +1,6 @@
 var shoe = require("shoe")
     , path = require("path")
-    , watchr = require("watchr")
+    , chokidar = require('chokidar')
     , bundle = require("browserify-server")
     , openStreams = []
 
@@ -29,12 +29,12 @@ function LiveReloadServer(options) {
             body: "require('./browser.js')(" + port + ")"
         })
 
-    watchr.watch({
-        paths: paths
-        , listener: reload
-        , ignoreHiddenFiles: true
-        , ignorePatterns: true
-    })
+    chokidar
+        .watch(paths, {
+            ignored: /[\/\\]\./,
+            ignoreInitial: true
+        })
+        .on('all', reload)
 
     sock.install(server, "/shoe")
 
@@ -63,7 +63,7 @@ function LiveReloadServer(options) {
         }
     }
 
-    function reload(fileName) {
+    function reload(changeType, fileName) {
         if (timer) {
             clearTimeout(timer)
         }
