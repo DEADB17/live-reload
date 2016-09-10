@@ -3,8 +3,10 @@ var reconnect = require("reconnect/shoe")
 module.exports = LiveReloadClient
 
 function LiveReloadClient(uri) {
+    var loc;
     if (typeof uri === "number") {
-        uri = "//localhost:" + uri
+        loc = document.location || { hostname: "localhost" };
+        uri = "//" + loc.hostname + ":" + uri;
     }
 
     reconnect(function (stream) {
