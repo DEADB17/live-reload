@@ -1,13 +1,14 @@
+/*eslint-env browser*/
+
 var reconnect = require("reconnect/shoe")
 
-module.exports = LiveReloadClient
+function LiveReloadClient() {
+    var src = document.currentScript.src;
+    var a = document.createElement('a');
+    var uri;
 
-function LiveReloadClient(uri) {
-    var loc;
-    if (typeof uri === "number") {
-        loc = document.location || { hostname: "localhost" };
-        uri = "//" + loc.hostname + ":" + uri;
-    }
+    a.href = src;
+    uri = '//' + a.host;
 
     reconnect(function (stream) {
         stream.on("data", ondata)
@@ -19,3 +20,5 @@ function ondata(data) {
         document.location.reload()
     }
 }
+
+LiveReloadClient();

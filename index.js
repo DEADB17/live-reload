@@ -1,15 +1,13 @@
 var shoe = require("shoe")
-    , path = require("path")
+    , fs = require("fs")
     , chokidar = require('chokidar')
-    , bundle = require("browserify-server")
     , openStreams = []
 
 module.exports = LiveReloadServer
 
 function LiveReloadServer(options) {
-    var fs, httpsOpts, server, isHttps = false;
+    var httpsOpts, server, isHttps = false;
     if (options.key && options.cert) {
-        fs = require("fs");
         httpsOpts = {
             key: fs.readFileSync(options.key),
             cert: fs.readFileSync(options.cert)
@@ -25,9 +23,7 @@ function LiveReloadServer(options) {
         , delay = options.delay || 1000
         , port = options.port || 9090
         , timer
-        , source = bundle(path.join(__dirname, "reload.js"), {
-            body: "require('./browser.js')(" + port + ")"
-        })
+        , source = fs.readFileSync('./bundle.js');
 
     chokidar
         .watch(paths, {
