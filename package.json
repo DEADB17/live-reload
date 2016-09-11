@@ -1,6 +1,6 @@
 {
   "name": "@deadb17/live-reload",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A live reload server & client",
   "homepage": "https://github.com/DEADB17/live-reload",
   "license": "MIT",

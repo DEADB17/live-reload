@@ -1,5 +1,6 @@
 var shoe = require("shoe")
     , fs = require("fs")
+    , path = require("path")
     , chokidar = require('chokidar')
     , openStreams = []
 
@@ -25,7 +26,7 @@ function LiveReloadServer(options) {
         , port = options.port || 9090
         , host = options.host || 'localhost'
         , uri = (isHttps ? "https" : "http") + "://" + host + ":" + port
-        , source = fs.readFileSync('./bundle.js', 'utf8')
+        , source = fs.readFileSync(path.resolve(__dirname, 'bundle.js'), 'utf8')
             .replace(/(var\s+liveReloadUri\s+=\s+['"]).+?(['"];?)/, '$1' + uri + '$2')
         , timer
 
