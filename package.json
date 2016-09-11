@@ -34,12 +34,7 @@
     "shoe": "^0.0.15"
   },
   "devDependencies": {},
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/Raynos/live-reload/raw/master/LICENSE"
-    }
-  ],
+  "license":  "MIT",
   "scripts": {},
   "bin": {
     "live-reload": "bin/reload.js"
