@@ -3,16 +3,11 @@
 var reconnect = require("reconnect/shoe")
 
 function LiveReloadClient() {
-    var src = document.currentScript.src;
-    var a = document.createElement('a');
-    var uri;
-
-    a.href = src;
-    uri = '//' + a.host;
+    var liveReloadUri = '//localhost:9090';
 
     reconnect(function (stream) {
         stream.on("data", ondata)
-    }).connect(uri + "/shoe")
+    }).connect(liveReloadUri + "/shoe")
 }
 
 function ondata(data) {

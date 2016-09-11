@@ -6,7 +6,7 @@ var shoe = require("shoe")
 module.exports = LiveReloadServer
 
 function LiveReloadServer(options) {
-    var httpsOpts, server, isHttps = false;
+    var httpsOpts, server, isHttps;
     if (options.key && options.cert) {
         httpsOpts = {
             key: fs.readFileSync(options.key),
@@ -15,6 +15,7 @@ function LiveReloadServer(options) {
         isHttps = true;
         server = require("https").createServer(httpsOpts, serveText)
     } else {
+        isHttps = false;
         server = require("http").createServer(serveText)
     }
     var sock = shoe(handleStream)
@@ -22,8 +23,11 @@ function LiveReloadServer(options) {
         , filterIgnored = options.ignore || noop
         , delay = options.delay || 1000
         , port = options.port || 9090
+        , host = options.host || 'localhost'
+        , uri = (isHttps ? "https" : "http") + "://" + host + ":" + port
+        , source = fs.readFileSync('./bundle.js', 'utf8')
+            .replace(/(var\s+liveReloadUri\s+=\s+['"]).+?(['"];?)/, '$1' + uri + '$2')
         , timer
-        , source = fs.readFileSync('./bundle.js');
 
     chokidar
         .watch(paths, {
@@ -34,12 +38,10 @@ function LiveReloadServer(options) {
 
     sock.install(server, "/shoe")
 
-    server.listen(port)
+    server.listen(port, host)
 
-    console.log("Live reload server listening on port", port
-                , "reloading on files. Using"
-                , isHttps ? "https" : "http")
-
+    console.log("Live reload server started on", uri + ". Add to your page:")
+    console.log('<script src="' + uri + '/"></script>')
 
     function serveText(req, res) {
         res.setHeader("content-type", "application/javascript")
