@@ -2,3 +2,6 @@ node_modules
 *.log
 *.err
 /bundle.js
+.dir-locals.el
+.DS_Store
+.tern-*
